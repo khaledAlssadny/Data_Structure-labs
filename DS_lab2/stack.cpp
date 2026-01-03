@@ -7,37 +7,49 @@ struct Node
   Node *next;
 };
 
+class LinkedList
+{
+private:
+  Node *head;
+
+public:
+  LinkedList()
+  {
+    head = NULL;
+  }
+
+  // Allow Stack to access head
+  friend class Stack;
+};
 class Stack
 {
 private:
-  Node *TOS;
+  LinkedList list;
 
 public:
-  Stack()
-  {
-    TOS = NULL;
-  }
-
   int Push(int d)
   {
     Node *newNode = new Node;
     newNode->data = d;
-    newNode->next = TOS;
-    TOS = newNode;
+
+    newNode->next = list.head;
+    list.head = newNode;
+
     return 1;
   }
 
   int Pop()
   {
-    if (TOS == NULL)
+    if (list.head == NULL)
     {
       cout << "Stack is empty" << endl;
       return -1;
     }
 
-    Node *temp = TOS;
+    Node *temp = list.head;
     int popped = temp->data;
-    TOS = TOS->next;
+
+    list.head = list.head->next;
     delete temp;
 
     return popped;
@@ -45,41 +57,23 @@ public:
 
   int getTos()
   {
-    if (TOS == NULL)
+    if (list.head == NULL)
     {
       cout << "Stack is empty" << endl;
       return -1;
     }
-    return TOS->data;
+    return list.head->data;
   }
 };
 
 int main()
 {
   Stack s;
-
-  // Push elements into the stack
-  s.Push(10);
-  s.Push(20);
-  s.Push(30);
-
-  // Get top element
-  cout << "Top element: " << s.getTos() << endl;
-
-  // Pop elements from the stack
-  cout << "Popped: " << s.Pop() << endl;
-  cout << "Popped: " << s.Pop() << endl;
-  cout << "Popped: " << s.Pop() << endl;
-
-  // Try to pop from empty stack
-  cout << "Popped: " << s.Pop() << endl;
-
   int n, value;
 
   cout << "How many elements do you want to push? ";
   cin >> n;
 
-  // Push elements
   for (int i = 0; i < n; i++)
   {
     cout << "Enter value: ";
@@ -89,11 +83,11 @@ int main()
 
   cout << "\nPopping all elements:\n";
 
-  // Pop all elements
-  int poppedValue;
-  while ((poppedValue = s.Pop()) != -1)
+  int popped;
+  while ((popped = s.Pop()) != -1)
   {
-    cout << poppedValue << endl;
+    cout << popped << endl;
   }
+
   return 0;
 }
